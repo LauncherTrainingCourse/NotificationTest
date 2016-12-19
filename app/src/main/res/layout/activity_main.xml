@@ -4,12 +4,12 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     tools:context="com.example.richo_han.notificationtest.MainActivity">
 
     <LinearLayout
@@ -20,15 +20,15 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:textSize="24dp"
-            android:text="Delay: " />
+            android:text="Delay: "
+            android:textSize="24dp" />
 
         <EditText
             android:id="@+id/delay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="delay in m.s. before 1st task" />
+            android:hint="delay in m.s. before 1st task"
+            android:inputType="number" />
     </LinearLayout>
 
     <LinearLayout
@@ -39,15 +39,15 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:textSize="24dp"
-            android:text="Period: " />
+            android:text="Period: "
+            android:textSize="24dp" />
 
         <EditText
             android:id="@+id/period"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="time in m.s. between tasks" />
+            android:hint="time in m.s. between tasks"
+            android:inputType="number" />
     </LinearLayout>
 
     <LinearLayout
@@ -58,15 +58,34 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:textSize="24dp"
-            android:text="Counts: " />
+            android:text="Counts: "
+            android:textSize="24dp" />
 
         <EditText
             android:id="@+id/counts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="number of tasks" />
+            android:hint="number of tasks"
+            android:inputType="number" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Reply: "
+            android:textSize="24dp" />
+
+        <Switch
+            android:id="@+id/reply_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <Button

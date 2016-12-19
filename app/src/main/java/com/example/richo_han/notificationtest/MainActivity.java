@@ -12,7 +12,9 @@ import android.support.v4.app.RemoteInput;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.util.Timer;
@@ -20,10 +22,12 @@ import java.util.TimerTask;
 
 public class MainActivity extends Activity {
     NotificationCompat.Builder mBuilder;
+    NotificationCompat.Action mReplyAction;
     Timer mTimer;
     EditText delayText, periodText, countText;
 
     int interval;
+    boolean mReplyMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,34 @@ public class MainActivity extends Activity {
                         .setContentText("Customized Notification")
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_ring));
 
+        Switch replySwitch = (Switch) findViewById(R.id.reply_switch);
+        replySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    setReplyEnabled();
+                } else {
+                    mBuilder.mActions.clear();
+                }
+            }
+        });
+
+        Button button = (Button) findViewById(R.id.send_button);
+        button.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (delayText.getText().toString().length() < 1 ||
+                        periodText.getText().toString().length() < 1 ||
+                        countText.getText().toString().length() < 1) {
+                    Toast.makeText(getApplicationContext(), "Please enter numbers!", Toast.LENGTH_LONG).show();
+                } else {
+                    sendNotification();
+                }
+            }
+        });
+    }
+
+    public void setReplyEnabled() {
         // Notification Actions
         String replyLabel = "Reply";
         RemoteInput remoteInput =
@@ -60,32 +92,18 @@ public class MainActivity extends Activity {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
 
-        NotificationCompat.Action replyAction =
+        mReplyAction =
                 new NotificationCompat.Action.Builder(
                         R.drawable.ic_ring,
                         replyLabel,
                         pendingIntent)
-                .addRemoteInput(remoteInput)
-                .setAllowGeneratedReplies(true)
-                .build();
+                        .addRemoteInput(remoteInput)
+                        .setAllowGeneratedReplies(true)
+                        .build();
 
         mBuilder
-                .addAction(replyAction)
+                .addAction(mReplyAction)
                 .setContentIntent(pendingIntent);
-
-        Button button = (Button) findViewById(R.id.send_button);
-        button.setOnClickListener(new Button.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if (delayText.getText().toString().length() < 1 ||
-                        periodText.getText().toString().length() < 1 ||
-                        countText.getText().toString().length() < 1) {
-                    Toast.makeText(getApplicationContext(), "Please enter numbers!", Toast.LENGTH_LONG).show();
-                } else {
-                    sendNotification();
-                }
-            }
-        });
     }
 
     public void sendNotification() {
