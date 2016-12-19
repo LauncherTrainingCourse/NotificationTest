@@ -8,10 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
     NotificationCompat.Builder mBuilder;
     Timer mTimer;
     int interval;
-    EditText delayText, durationText, timesText;
+    EditText delayText, periodText, countText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +28,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         delayText = (EditText) findViewById(R.id.delay);
-        durationText = (EditText) findViewById(R.id.duration);
-        timesText = (EditText) findViewById(R.id.times);
+        periodText = (EditText) findViewById(R.id.period);
+        countText = (EditText) findViewById(R.id.counts);
 
         mBuilder =
                 new NotificationCompat.Builder(this)
@@ -41,16 +41,22 @@ public class MainActivity extends Activity {
         button.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
-                sendNotification();
+                if (delayText.getText().toString().length() < 1 ||
+                        periodText.getText().toString().length() < 1 ||
+                        countText.getText().toString().length() < 1) {
+                    Toast.makeText(getApplicationContext(), "Please enter numbers!", Toast.LENGTH_LONG).show();
+                } else {
+                    sendNotification();
+                }
             }
         });
     }
 
     public void sendNotification() {
-        int delay = 1000, duration = 1000, times = 5;
+        int delay, duration, times;
         delay = Integer.parseInt(delayText.getText().toString());
-        duration = Integer.parseInt(durationText.getText().toString());
-        times = Integer.parseInt(timesText.getText().toString());
+        duration = Integer.parseInt(periodText.getText().toString());
+        times = Integer.parseInt(countText.getText().toString());
         sendNotification(delay, duration, times);
     }
 
