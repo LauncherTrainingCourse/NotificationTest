@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="1000 for 1 sec." />
+            android:hint="delay in m.s. before 1st task" />
     </LinearLayout>
 
     <LinearLayout
@@ -40,14 +40,14 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:textSize="24dp"
-            android:text="Duration: " />
+            android:text="Period: " />
 
         <EditText
-            android:id="@+id/duration"
+            android:id="@+id/period"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="1000 for 1 sec." />
+            android:hint="time in m.s. between tasks" />
     </LinearLayout>
 
     <LinearLayout
@@ -62,10 +62,11 @@
             android:text="Counts: " />
 
         <EditText
-            android:id="@+id/times"
+            android:id="@+id/counts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number" />
+            android:inputType="number"
+            android:hint="number of tasks" />
     </LinearLayout>
 
     <Button
