@@ -19,8 +19,9 @@ import java.util.TimerTask;
 public class MainActivity extends Activity {
     NotificationCompat.Builder mBuilder;
     Timer mTimer;
-    int interval;
     EditText delayText, periodText, countText;
+
+    int interval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
