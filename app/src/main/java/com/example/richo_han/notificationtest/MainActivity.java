@@ -5,8 +5,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.RemoteInput;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.Button;
@@ -32,11 +34,44 @@ public class MainActivity extends Activity {
         periodText = (EditText) findViewById(R.id.period);
         countText = (EditText) findViewById(R.id.counts);
 
+        // Notification Customization
         mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_ring)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
+                        .setContentTitle("Notification Testing")
+                        .setContentText("Customized Notification")
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_ring));
+
+        // Notification Actions
+        String replyLabel = "Reply";
+        RemoteInput remoteInput =
+                new RemoteInput.Builder(NotificationActivity.KEY_TEXT_REPLY)
+                        .setLabel(replyLabel)
+                        .build();
+
+        Intent resultIntent = new Intent(this, NotificationActivity .class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(NotificationActivity .class);
+        stackBuilder.addNextIntent(resultIntent);
+
+        PendingIntent pendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        NotificationCompat.Action replyAction =
+                new NotificationCompat.Action.Builder(
+                        R.drawable.ic_ring,
+                        replyLabel,
+                        pendingIntent)
+                .addRemoteInput(remoteInput)
+                .setAllowGeneratedReplies(true)
+                .build();
+
+        mBuilder
+                .addAction(replyAction)
+                .setContentIntent(pendingIntent);
 
         Button button = (Button) findViewById(R.id.send_button);
         button.setOnClickListener(new Button.OnClickListener(){
@@ -79,9 +114,9 @@ public class MainActivity extends Activity {
                                 PendingIntent.FLAG_UPDATE_CURRENT
                         );
                 mBuilder.setContentIntent(resultPendingIntent);
-                NotificationManager mNotificationManager =
+                NotificationManager notificationManager =
                         (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(interval, mBuilder.build());
+                notificationManager.notify(interval, mBuilder.build());
 
                 setInterval();
             }
