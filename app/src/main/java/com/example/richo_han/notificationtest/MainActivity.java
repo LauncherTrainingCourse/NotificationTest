@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         delayText = (EditText) findViewById(R.id.delay);
         periodText = (EditText) findViewById(R.id.period);
