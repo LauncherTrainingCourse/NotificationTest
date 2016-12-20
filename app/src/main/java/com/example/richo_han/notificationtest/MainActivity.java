@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -12,6 +13,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -19,20 +21,27 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+import static com.example.richo_han.notificationtest.SettingsActionProvider.PREFS_NAME;
+
+public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuItemClickListener {
     NotificationCompat.Builder mBuilder;
     NotificationCompat.Action mReplyAction;
     Timer mTimer;
     EditText delayText, periodText, countText;
+    Switch replySwitch;
 
     int interval;
+    boolean replyEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stetho.initializeWithDefaults(this);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -51,10 +60,11 @@ public class MainActivity extends AppCompatActivity {
                         .setContentText("Customized Notification")
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_ring));
 
-        Switch replySwitch = (Switch) findViewById(R.id.reply_switch);
+        replySwitch = (Switch) findViewById(R.id.reply_switch);
         replySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                replyEnabled = isChecked;
                 setReplyEnabled(isChecked);
             }
         });
@@ -63,12 +73,10 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if (delayText.getText().toString().length() < 1 ||
-                        periodText.getText().toString().length() < 1 ||
-                        countText.getText().toString().length() < 1) {
-                    Toast.makeText(getApplicationContext(), "Please enter numbers!", Toast.LENGTH_LONG).show();
-                } else {
+                if (isInputsCompleted()) {
                     sendNotification();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please enter numbers!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -174,5 +182,47 @@ public class MainActivity extends AppCompatActivity {
         if (interval == 1)
             mTimer.cancel();
         return --interval;
+    }
+
+    private boolean isInputsCompleted() {
+        if (delayText.getText().toString().length() < 1 ||
+                periodText.getText().toString().length() < 1 ||
+                countText.getText().toString().length() < 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+
+        if(item.getGroupId() == SettingsActionProvider.ADD_TO_SETTINGS) {
+
+            if (isInputsCompleted()) {
+                int delay, period, counts;
+                delay = Integer.parseInt(delayText.getText().toString());
+                period = Integer.parseInt(periodText.getText().toString());
+                counts = Integer.parseInt(countText.getText().toString());
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("Setting " + item.getItemId(), delay + "/" + period + "/" + counts + "/" + replyEnabled);
+                editor.commit();
+                Toast.makeText(this, "Saved to settings!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Please enter numbers!", Toast.LENGTH_LONG).show();
+            }
+        } else {
+
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            String[] parameters = settings.getString("Setting " + item.getItemId(), "").split("/");
+            delayText.setText(parameters[0]);
+            periodText.setText(parameters[1]);
+            countText.setText(parameters[2]);
+            replySwitch.setChecked(Boolean.parseBoolean(parameters[3]));
+
+            Toast.makeText(this, "Loading settings...", Toast.LENGTH_SHORT).show();
+        }
+        return true;
     }
 }
