@@ -50,11 +50,7 @@ public class MainActivity extends Activity {
         replySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    setReplyEnabled();
-                } else {
-                    mBuilder.mActions.clear();
-                }
+                setReplyEnabled(isChecked);
             }
         });
 
@@ -73,49 +69,65 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void setReplyEnabled() {
-        // Notification Actions
-        String replyLabel = "Reply";
-        RemoteInput remoteInput =
-                new RemoteInput.Builder(NotificationActivity.KEY_TEXT_REPLY)
-                        .setLabel(replyLabel)
-                        .build();
+    /**
+     * If enabled, add reply action to the Notification Builder.
+     * @param enabled
+     */
+    private void setReplyEnabled(boolean enabled) {
+        if(enabled) {
+            String replyLabel = "Reply";
+            RemoteInput remoteInput =
+                    new RemoteInput.Builder(NotificationActivity.KEY_TEXT_REPLY)
+                            .setLabel(replyLabel)
+                            .build();
 
-        Intent resultIntent = new Intent(this, NotificationActivity .class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(NotificationActivity .class);
-        stackBuilder.addNextIntent(resultIntent);
+            Intent resultIntent = new Intent(this, NotificationActivity.class);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            stackBuilder.addParentStack(NotificationActivity.class);
+            stackBuilder.addNextIntent(resultIntent);
 
-        PendingIntent pendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
+            PendingIntent pendingIntent =
+                    stackBuilder.getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
 
-        mReplyAction =
-                new NotificationCompat.Action.Builder(
-                        R.drawable.ic_ring,
-                        replyLabel,
-                        pendingIntent)
-                        .addRemoteInput(remoteInput)
-                        .setAllowGeneratedReplies(true)
-                        .build();
+            mReplyAction =
+                    new NotificationCompat.Action.Builder(
+                            R.drawable.ic_ring,
+                            replyLabel,
+                            pendingIntent)
+                            .addRemoteInput(remoteInput)
+                            .setAllowGeneratedReplies(true)
+                            .build();
 
-        mBuilder
-                .addAction(mReplyAction)
-                .setContentIntent(pendingIntent);
+            mBuilder
+                    .addAction(mReplyAction)
+                    .setContentIntent(pendingIntent);
+        } else {
+            mBuilder.mActions.clear();
+        }
     }
 
-    public void sendNotification() {
-        int delay, duration, times;
+    private void sendNotification() {
+        int delay, period, counts;
         delay = Integer.parseInt(delayText.getText().toString());
-        duration = Integer.parseInt(periodText.getText().toString());
-        times = Integer.parseInt(countText.getText().toString());
-        sendNotification(delay, duration, times);
+        period = Integer.parseInt(periodText.getText().toString());
+        counts = Integer.parseInt(countText.getText().toString());
+        sendNotification(delay, period, counts);
     }
 
-    public void sendNotification(int delay, int duration, int times) {
-        interval = times;
+    /**
+     * Send notification based on delay, period, and counts.
+     * delay:   Delay in milliseconds before task is to be executed.
+     * period:  Time in milliseconds between successive task executions.
+     * counts:  Number of tasks you want the app to show for you.
+     * @param delay
+     * @param period
+     * @param counts
+     */
+    private void sendNotification(int delay, int period, int counts) {
+        interval = counts;
         mTimer = new Timer(true);
 
         TimerTask task = new TimerTask() {
@@ -140,7 +152,7 @@ public class MainActivity extends Activity {
             }
         };
 
-        mTimer.schedule(task, delay, duration);
+        mTimer.schedule(task, delay, period);
     }
 
     private final int setInterval() {
