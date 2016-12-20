@@ -5,3 +5,6 @@ The app let you test Notification by setting `delay`, `period`, and `counts`.
 + `counts`: Number of tasks you want the app to show for you.
 
 ![Sample setting](http://i.imgur.com/en2SQZ5.jpg)
+
+### References
++ Icon made by [Vectors Market](http://www.flaticon.com/authors/vectors-market) from www.flaticon.com
