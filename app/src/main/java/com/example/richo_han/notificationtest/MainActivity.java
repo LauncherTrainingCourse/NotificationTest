@@ -27,7 +27,6 @@ public class MainActivity extends Activity {
     EditText delayText, periodText, countText;
 
     int interval;
-    boolean mReplyMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +154,10 @@ public class MainActivity extends Activity {
         mTimer.schedule(task, delay, period);
     }
 
+    /**
+     * Count down the number of notification shown.
+     * @return
+     */
     private final int setInterval() {
         if (interval == 1)
             mTimer.cancel();
