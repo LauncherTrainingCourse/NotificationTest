@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
             }
         });
 
-        Button button = (Button) findViewById(R.id.send_button);
-        button.setOnClickListener(new Button.OnClickListener(){
+        Button sendButton = (Button) findViewById(R.id.send_button);
+        sendButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
                 if (isInputsCompleted()) {
@@ -77,6 +77,17 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
                 } else {
                     Toast.makeText(getApplicationContext(), "Please enter numbers!", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        Button clearButton = (Button) findViewById(R.id.clear_button);
+        clearButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                delayText.setText("");
+                periodText.setText("");
+                countText.setText("");
+                replySwitch.setChecked(false);
             }
         });
     }
