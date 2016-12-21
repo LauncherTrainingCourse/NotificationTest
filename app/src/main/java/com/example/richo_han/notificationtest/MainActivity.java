@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.RemoteInput;
 import android.support.v4.app.TaskStackBuilder;
@@ -28,7 +29,8 @@ import java.util.TimerTask;
 
 import static com.example.richo_han.notificationtest.SettingsActionProvider.PREFS_NAME;
 
-public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity
+        implements MenuItem.OnMenuItemClickListener, NewSettingsDialogFragment.NewSettingsDialogListener {
     NotificationCompat.Builder mBuilder;
     NotificationCompat.Action mReplyAction;
     Timer mTimer;
@@ -210,22 +212,22 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
         if(item.getGroupId() == SettingsActionProvider.ADD_TO_SETTINGS) {
 
             if (isInputsCompleted()) {
-                int delay, period, counts;
-                delay = Integer.parseInt(delayText.getText().toString());
-                period = Integer.parseInt(periodText.getText().toString());
-                counts = Integer.parseInt(countText.getText().toString());
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("Setting " + item.getItemId(), delay + "/" + period + "/" + counts + "/" + replyEnabled);
-                editor.commit();
+                NewSettingsDialogFragment dialogFragment = new NewSettingsDialogFragment();
+                dialogFragment.show(getSupportFragmentManager(), "NewSettingsDialogFragment");
                 Toast.makeText(this, "Saved to settings!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getApplicationContext(), "Please enter numbers!", Toast.LENGTH_LONG).show();
             }
+        } else if(item.getGroupId() == SettingsActionProvider.EDIT_SETTINGS) {
+
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.clear();
+            editor.commit();
         } else {
 
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-            String[] parameters = settings.getString("Setting " + item.getItemId(), "").split("/");
+            String[] parameters = settings.getString(item.getTitle().toString(), "").split("/");
             delayText.setText(parameters[0]);
             periodText.setText(parameters[1]);
             countText.setText(parameters[2]);
@@ -234,5 +236,17 @@ public class MainActivity extends AppCompatActivity implements MenuItem.OnMenuIt
             Toast.makeText(this, "Loading settings...", Toast.LENGTH_SHORT).show();
         }
         return true;
+    }
+
+    @Override
+    public void onNewSettingsDialogPositiveClick(DialogFragment dialog, String name) {
+        int delay, period, counts;
+        delay = Integer.parseInt(delayText.getText().toString());
+        period = Integer.parseInt(periodText.getText().toString());
+        counts = Integer.parseInt(countText.getText().toString());
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(name, delay + "/" + period + "/" + counts + "/" + replyEnabled);
+        editor.commit();
     }
 }

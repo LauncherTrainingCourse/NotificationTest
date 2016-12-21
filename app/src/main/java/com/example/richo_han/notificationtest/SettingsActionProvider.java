@@ -18,6 +18,7 @@ import java.util.List;
 public class SettingsActionProvider extends ActionProvider {
     public static final int LOAD_FROM_SETTINGS = 0;
     public static final int ADD_TO_SETTINGS = 1;
+    public static final int EDIT_SETTINGS = 2;
     public static final String PREFS_NAME = "NTestSettings";
 
     public static
@@ -76,6 +77,10 @@ public class SettingsActionProvider extends ActionProvider {
 
         subMenu
                 .add(ADD_TO_SETTINGS, mMenuIndex, mMenuIndex, "Add to Settings")
+                .setOnMenuItemClickListener(mListener);
+
+        subMenu
+                .add(EDIT_SETTINGS, mMenuIndex+1, mMenuIndex+1, "Remove Settings")
                 .setOnMenuItemClickListener(mListener);
     }
 }
