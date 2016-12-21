@@ -2,9 +2,12 @@
     <string name="app_name">Notification Test</string>
     <string name="settings">Settings</string>
 
-    <string name="dialog_title">New settings</string>
+    <string name="new_settings_dialog_title">New settings</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
+
+    <string name="edit_settings_dialog_title">Select settings to be removed</string>
+    <string name="remove">Remove</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

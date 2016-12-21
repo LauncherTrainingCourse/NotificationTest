@@ -43,7 +43,7 @@ public class NewSettingsDialogFragment extends DialogFragment {
         final View view = inflater.inflate(R.layout.fragment_new_settings_dialog, null);
 
         builder
-                .setTitle(R.string.dialog_title)
+                .setTitle(R.string.new_settings_dialog_title)
                 .setView(view)
                 .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

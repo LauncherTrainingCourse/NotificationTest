@@ -24,13 +24,14 @@ import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.example.richo_han.notificationtest.SettingsActionProvider.PREFS_NAME;
 
 public class MainActivity extends AppCompatActivity
-        implements MenuItem.OnMenuItemClickListener, NewSettingsDialogFragment.NewSettingsDialogListener {
+        implements MenuItem.OnMenuItemClickListener, NewSettingsDialogFragment.NewSettingsDialogListener, EditSettingsDialogFragment.EditSettingsDialogListener {
     NotificationCompat.Builder mBuilder;
     NotificationCompat.Action mReplyAction;
     Timer mTimer;
@@ -220,10 +221,8 @@ public class MainActivity extends AppCompatActivity
             }
         } else if(item.getGroupId() == SettingsActionProvider.EDIT_SETTINGS) {
 
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.clear();
-            editor.commit();
+            EditSettingsDialogFragment dialogFragment = new EditSettingsDialogFragment();
+            dialogFragment.show(getSupportFragmentManager(), "EditSettingsDialogFragment");
         } else {
 
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -247,6 +246,16 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(name, delay + "/" + period + "/" + counts + "/" + replyEnabled);
+        editor.commit();
+    }
+
+    @Override
+    public void onEditSettingsDialogPositiveClick(DialogFragment dialog, ArrayList<String> items) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        for(String key : items){
+            editor.remove(key);
+        }
         editor.commit();
     }
 }
