@@ -215,7 +215,6 @@ public class MainActivity extends AppCompatActivity
             if (isInputsCompleted()) {
                 NewSettingsDialogFragment dialogFragment = new NewSettingsDialogFragment();
                 dialogFragment.show(getSupportFragmentManager(), "NewSettingsDialogFragment");
-                Toast.makeText(this, "Saved to settings!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getApplicationContext(), "Please enter numbers!", Toast.LENGTH_LONG).show();
             }
@@ -231,8 +230,6 @@ public class MainActivity extends AppCompatActivity
             periodText.setText(parameters[1]);
             countText.setText(parameters[2]);
             replySwitch.setChecked(Boolean.parseBoolean(parameters[3]));
-
-            Toast.makeText(this, "Loading settings...", Toast.LENGTH_SHORT).show();
         }
         return true;
     }
@@ -247,6 +244,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(name, delay + "/" + period + "/" + counts + "/" + replyEnabled);
         editor.commit();
+        Toast.makeText(this, "Saved to settings!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -257,5 +255,6 @@ public class MainActivity extends AppCompatActivity
             editor.remove(key);
         }
         editor.commit();
+        Toast.makeText(this, "Settings updated!", Toast.LENGTH_SHORT).show();
     }
 }
