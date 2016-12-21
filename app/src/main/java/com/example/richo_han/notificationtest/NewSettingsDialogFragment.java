@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +31,16 @@ public class NewSettingsDialogFragment extends DialogFragment {
     EditText mEditText;
     Button mButton;
 
+    public static NewSettingsDialogFragment newInstance(String name) {
+        NewSettingsDialogFragment dialogFragment = new NewSettingsDialogFragment();
+
+        Bundle args = new Bundle();
+        args.putString("Name", name);
+        dialogFragment.setArguments(args);
+
+        return dialogFragment;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -47,8 +58,7 @@ public class NewSettingsDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        mEditText.setText(getArguments().getString("Name"));
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -70,6 +80,8 @@ public class NewSettingsDialogFragment extends DialogFragment {
             }
         });
 
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder
                 .setTitle(R.string.new_settings_dialog_title)
                 .setView(mView)
@@ -96,7 +108,6 @@ public class NewSettingsDialogFragment extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialog) {
                 mButton = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                mButton.setEnabled(false);
             }
         });
 

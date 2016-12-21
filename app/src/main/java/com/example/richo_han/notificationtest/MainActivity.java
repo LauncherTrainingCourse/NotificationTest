@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity
         if(item.getGroupId() == SettingsActionProvider.ADD_TO_SETTINGS) {
 
             if (isInputsCompleted()) {
-                NewSettingsDialogFragment dialogFragment = new NewSettingsDialogFragment();
+                NewSettingsDialogFragment dialogFragment = NewSettingsDialogFragment.newInstance("Setting " + item.getItemId());
                 dialogFragment.show(getSupportFragmentManager(), "NewSettingsDialogFragment");
             } else {
                 Toast.makeText(getApplicationContext(), "Please enter numbers!", Toast.LENGTH_LONG).show();

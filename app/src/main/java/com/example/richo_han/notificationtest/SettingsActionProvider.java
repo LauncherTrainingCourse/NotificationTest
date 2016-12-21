@@ -80,7 +80,7 @@ public class SettingsActionProvider extends ActionProvider {
                 .setOnMenuItemClickListener(mListener);
 
         subMenu
-                .add(EDIT_SETTINGS, mMenuIndex+1, mMenuIndex+1, "Remove Settings")
+                .add(EDIT_SETTINGS, mMenuIndex+1, mMenuIndex+1, "Edit Settings")
                 .setOnMenuItemClickListener(mListener);
     }
 }
