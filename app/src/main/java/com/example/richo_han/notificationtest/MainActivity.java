@@ -32,6 +32,8 @@ import static com.example.richo_han.notificationtest.SettingsActionProvider.PREF
 
 public class MainActivity extends AppCompatActivity
         implements MenuItem.OnMenuItemClickListener, NewSettingsDialogFragment.NewSettingsDialogListener, EditSettingsDialogFragment.EditSettingsDialogListener {
+    public static final String PREFS_LAST_SETTINGS = "NLastSettings";
+
     NotificationCompat.Builder mBuilder;
     NotificationCompat.Action mReplyAction;
     Timer mTimer;
@@ -93,6 +95,18 @@ public class MainActivity extends AppCompatActivity
                 replySwitch.setChecked(false);
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences settings = getSharedPreferences(PREFS_LAST_SETTINGS, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("temp_delay", delayText.getText().toString());
+        editor.putString("temp_period", periodText.getText().toString());
+        editor.putString("temp_counts", countText.getText().toString());
+        editor.putBoolean("temp_reply_mode", replySwitch.isChecked());
+        editor.commit();
     }
 
     @Override
