@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.BoolRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.RemoteInput;
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        loadLastSettings();
+
         Button sendButton = (Button) findViewById(R.id.send_button);
         sendButton.setOnClickListener(new Button.OnClickListener(){
             @Override
@@ -113,6 +116,15 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
+    }
+
+    private void loadLastSettings() {
+        SharedPreferences settings = getSharedPreferences(PREFS_LAST_SETTINGS, 0);
+        String tmpDelay = settings.getString("temp_delay", "");
+        String tmpPeriod = settings.getString("temp_period", "");
+        String tmpCounts = settings.getString("temp_counts", "");
+        Boolean tmpChecked = settings.getBoolean("temp_reply_mode", false);
+        loadSettings(tmpDelay, tmpPeriod, tmpCounts, tmpChecked);
     }
 
     private void loadSettings(String delay, String period, String counts, boolean checked) {
