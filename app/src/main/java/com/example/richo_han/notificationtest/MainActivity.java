@@ -115,6 +115,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void loadSettings(String delay, String period, String counts, boolean checked) {
+        delayText.setText(delay);
+        periodText.setText(period);
+        countText.setText(counts);
+        replySwitch.setChecked(checked);
+    }
+
     /**
      * If enabled, add reply action to the Notification Builder.
      * @param enabled
@@ -240,10 +247,10 @@ public class MainActivity extends AppCompatActivity
 
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             String[] parameters = settings.getString(item.getTitle().toString(), "").split("/");
-            delayText.setText(parameters[0]);
-            periodText.setText(parameters[1]);
-            countText.setText(parameters[2]);
-            replySwitch.setChecked(Boolean.parseBoolean(parameters[3]));
+            loadSettings(parameters[0],
+                    parameters[1],
+                    parameters[2],
+                    Boolean.parseBoolean(parameters[3]));
         }
         return true;
     }
